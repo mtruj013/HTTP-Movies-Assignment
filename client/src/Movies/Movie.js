@@ -11,11 +11,8 @@ function Movie({ addToSavedList, updateMovie }) {
   const fetchMovie = (id) => {
     axios
       .get(`http://localhost:5000/api/movies/${id}`)
-      // .then((res) => setMovie(res.data))
-      .then(res => {
-        setMovie(res.data)
-        
-      })
+      .then((res) => setMovie(res.data))
+      
       .catch((err) => console.log(err.response));
   };
 
@@ -23,9 +20,9 @@ function Movie({ addToSavedList, updateMovie }) {
     addToSavedList(movie);
   };
 
-  const upateMov = () => {
-    updateMovie(movie);
-  }
+  // const upateMov = () => {
+  //   updateMovie(movie);
+  // }
 
   useEffect(() => {
     fetchMovie(params.id);
@@ -42,7 +39,7 @@ function Movie({ addToSavedList, updateMovie }) {
       <div className="save-button" onClick={saveMovie}>
         Save
       </div>
-        <button onClick={upateMov => push(`/update-movies/${params.id}`) }>Edit</button>
+        <button onClick={() => push(`/update-movies/${params.id}`) }>Edit</button>
     </div>
   );
 }

@@ -10,7 +10,7 @@ const initialState = {
 }
 
 const UpdateMovie = props => {
-    console.log(props)
+    // console.log(props)
 
     const [movie, setMovie] = useState(initialState);
     const { push } = useHistory();
@@ -20,7 +20,7 @@ const UpdateMovie = props => {
         axios
             .get(`http://localhost:5000/api/movies/${id}`)
             .then(res => {
-                console.log(res)
+                // console.log(res)
                 setMovie(res.data)
             })
             .catch(err => console.log(err))
@@ -29,11 +29,14 @@ const UpdateMovie = props => {
     const handleChange = e => {
         e.preventDefault();
 
-        setMovie({
-            ...movie,
-            [e.target.name]: e.target.value
-
-        })
+        let value = e.target.value
+        if (e.target.name === 'stars'){
+            let starsArr = value.split(',')
+            setMovie({ ...movie, [e.target.name]: starsArr})
+        } else {
+            setMovie({ ...movie, [e.target.name]: value})
+        }
+        console.log(movie)
 
     }
 
@@ -41,9 +44,11 @@ const UpdateMovie = props => {
         e.preventDefault();
         axios.put(`http://localhost:5000/api/movies/${id}`, movie)
         .then ( res => {
+            props.getMovie()
             setMovie(
                 res.data
             )
+            push('/')
         })
         .catch(err => {
             console.log(err)
@@ -52,7 +57,7 @@ const UpdateMovie = props => {
 
     return (
         <div>
-            <h3>Add A Movie</h3>
+            <h3>Edit Movie</h3>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="title">
                     Title:
