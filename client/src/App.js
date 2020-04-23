@@ -9,11 +9,15 @@ import UpdateMovie from './Movies/UpdateMovie';
 const App = () => {
   const [savedList, setSavedList] = useState([]);
   const [movieList, setMovieList] = useState([]);
+  const [movieCounter, setCounter] = useState([])
 
   const getMovieList = () => {
     axios
       .get("http://localhost:5000/api/movies")
-      .then(res => setMovieList(res.data))
+      .then(res => {
+        setMovieList(res.data)
+        setCounter(res.data.length)
+      })
       .catch(err => console.log(err.response));
   };
 
@@ -23,11 +27,12 @@ const App = () => {
 
   useEffect(() => {
     getMovieList();
-  }, []);
+  }, [movieCounter]);
 
-  const updateMovie = movie => {
-    setMovieList([...movieList, movie])
+  const deleteFromList = () => {
+    setCounter(movieCounter - 1)
   }
+
 
   return (
     <>
@@ -38,11 +43,11 @@ const App = () => {
       </Route>
 
       <Route path="/update-movies/:id"
-        render={()=> <UpdateMovie getMovie={getMovieList} />} 
+        render={() => <UpdateMovie getMovie={getMovieList} />}
       />
 
       <Route path="/movies/:id">
-        <Movie addToSavedList={addToSavedList} updateMovie={updateMovie}/>
+        <Movie addToSavedList={addToSavedList} deleteMov={deleteFromList} />
       </Route>
     </>
   );
